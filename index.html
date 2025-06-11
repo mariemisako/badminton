@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xavier School Badminton Court – 80s Birthday Rally</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --court-top:#2ce66d; --court-bottom:#138e46; --line:#ffffff;
+  --p1:#ff5a38; --p2:#36c5ff; --accent:#ffeb3b;
+  --font:"Press Start 2P", monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#000;color:#fff;font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow:hidden;image-rendering:pixelated;
+}
+body::before{content:"";position:fixed;inset:-50%;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="%23ffffff10"><path d="M13 2 4 11l9 11 9-11L13 2Z"/></svg>');background-size:40px;opacity:.04;animation:bg 120s linear infinite;pointer-events:none}
+@keyframes bg{from{transform:translateX(0)}to{transform:translateX(-40px)}}
+header{width:100%;padding:1rem 2rem;text-align:center;font-size:1.1rem;letter-spacing:1.5px;background:linear-gradient(90deg,var(--p1),var(--accent),var(--p2));background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:slide 6s linear infinite;border-bottom:4px solid var(--accent);text-shadow:0 0 6px var(--p1),0 0 12px var(--p2);}
+@keyframes slide{0%{background-position:0}100%{background-position:300% 0}}
+main{flex:1;width:100%;display:flex;justify-content:center;align-items:center}
+canvas#court{background:#000;border:4px solid var(--line);box-shadow:0 0 16px var(--accent);}
+.overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;background:rgba(0,0,0,.9);color:#fff;z-index:1000;opacity:0;pointer-events:none;transition:opacity .4s}
+.overlay.visible{opacity:1;pointer-events:auto}
+.overlay video{max-width:600px;width:90%;border:4px solid var(--accent);box-shadow:0 0 12px var(--accent)}
+.btn,input{font-family:var(--font);border:4px solid var(--accent);padding:.7rem 1.4rem;font-size:.7rem}
+.btn{background:#111;color:#fff;cursor:pointer;box-shadow:0 0 8px var(--accent);transition:transform .15s}
+.btn:hover{transform:scale(1.05)}
+input{background:#111;color:#fff;width:220px;text-align:center}
+</style>
+</head>
+<body>
+<header>★ XAVIER SCHOOL BADMINTON COURT ★</header>
+<main><canvas id="court" width="800" height="450"></canvas></main>
+<div id="entry" class="overlay visible"><h2 style="font-size:.9rem">ENTER PLAYERS</h2><input id="p1Name" placeholder="Player 1" value="Player1"><input id="p2Name" placeholder="Player 2" value="Player2"><button id="start" class="btn">START MATCH</button></div>
+<div id="greet" class="overlay"><video id="greetVid" playsinline><source src="greeting.mp4" type="video/mp4"></video></div>
+<div id="win" class="overlay"><h2 id="winMsg" style="font-size:.9rem"></h2><button id="again" class="btn">PLAY AGAIN</button></div>
+<canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:1500;display:none"></canvas>
+<audio id="hit" src="hit.wav"></audio><audio id="score" src="score.wav"></audio><audio id="victory" src="win.wav"></audio><audio id="clickSfx" src="click.wav"></audio>
+<script>
+const $=id=>document.getElementById(id),css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const cv=$('court'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;const cf=$('confetti'),cctx=cf.getContext('2d');cf.width=innerWidth;cf.height=innerHeight;
+const RW=8,RH=85,SPD=7,MAX=5;const p1={x:36,y:H/2-RH/2,dy:0,up:'w',dn:'s',sc:0,col:css('--p1'),nm:'Player1'};const p2={x:W-36-RW,y:H/2-RH/2,dy:0,up:'ArrowUp',dn:'ArrowDown',sc:0,col:css('--p2'),nm:'Player2'};const bd={x:W/2,y:H/2,r:7,dx:5,dy:4};
+let run=false,loopId;const key={};addEventListener('keydown',e=>key[e.key]=true);addEventListener('keyup',e=>key[e.key]=false);
+const sfx={hit:$('hit'),score:$('score'),vic:$('victory'),click:$('clickSfx')};function play(a){if(a){a.currentTime=0;a.play().catch(()=>{});}}
+let confettiArr=[];function launchConfetti(){cf.style.display='block';confettiArr=[];for(let i=0;i<160;i++){confettiArr.push({x:Math.random()*cf.width,y:Math.random()*-cf.height,size:Math.random()*6+3,vy:Math.random()*3+2,color:`hsl(${Math.random()*360},100%,60%)`,vx:(Math.random()-.5)*2,rot:Math.random()*360});}requestAnimationFrame(confLoop);setTimeout(()=>{cf.style.display='none';},6000);}function confLoop(){cctx.clearRect(0,0,cf.width,cf.height);confettiArr.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=4;cctx.fillStyle=p.color;cctx.save();cctx.translate(p.x,p.y);cctx.rotate(p.rot*Math.PI/180);cctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);cctx.restore();});if(confettiArr.some(p=>p.y<cf.height))requestAnimationFrame(confLoop);} 
+function drawCourt(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,css('--court-top'));g.addColorStop(1,css('--court-bottom'));ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.lineWidth=4;ctx.strokeStyle=css('--line');ctx.strokeRect(2,2,W-4,H-4);ctx.beginPath();ctx.moveTo(W/2,2);ctx.lineTo(W/2,H-2);ctx.stroke();}
+function racket(p,l){ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y+20,RW,RH-20);ctx.strokeStyle=p.col;ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(p.x+(l?-14:RW+14),p.y+20,18,24,0,0,6.283);ctx.stroke();}
+function bird(){ctx.fillStyle=css('--line');ctx.beginPath();ctx.arc(bd.x,bd.y,bd.r,0,6.283);ctx.fill();ctx.beginPath();ctx.moveTo(bd.x-3,bd.y+bd.r);ctx.lineTo(bd.x,bd.y+bd.r+10);ctx.lineTo(bd.x+3,bd.y+bd.r);ctx.fill();}
+function hud(){ctx.fillStyle='#fff';ctx.font='14px '+css('--font');ctx.fillText(`${p1.nm}: ${p1.sc}`,16,28);const t=`${p2.nm}: ${p2.sc}`;ctx.fillText(t,W-16-ctx.measureText(t).width,28);} 
+function reset(dir){bd.x=W/2;bd.y=H/2;bd.dx=5*dir;bd.dy=(Math.random()>.5?4:-4);}function collide(p,l){return l?bd.x-bd.r<=p.x+RW&&bd.y>=p.y&&bd.y<=p.y+RH:bd.x+bd.r>=p.x&&bd.y>=p.y&&bd.y<=p.y+RH;}
+function update(){[p1,p2].forEach(p=>{p.dy=0;if(key[p.up])p.dy=-SPD;if(key[p.dn])p.dy=SPD;p.y=Math.max(0,Math.min(H-RH,p.y+p.dy));});bd.x+=bd.dx;bd.y+=bd.dy;if(bd.y-bd.r<=2||bd.y+bd.r>=H-2){bd.dy*=-1;play(sfx.hit);}if(collide(p1,true)){bd.dx=Math.abs(bd.dx);play(sfx.hit);}if(collide(p2,false)){bd.dx=-Math.abs(bd.dx);play(sfx.hit);}if(bd.x<-30){p2.sc++;play(sfx.score);reset(1);}if(bd.x>W+30){p1.sc++;play(sfx.score);reset(-1);}if(p1.sc>=MAX||p2.sc>=MAX)finish();}
+function draw(){drawCourt();racket(p1,true);racket(p2,false);bird();hud();}
+function loop(){if(!run)return;update();draw();loopId=requestAnimationFrame(loop);} 
+function finish(){run=false;cancelAnimationFrame(loopId);play(sfx.vic);if(p2.sc>=MAX){launchConfetti();$('greet').classList.add('visible');$('greetVid').currentTime=0;$('greetVid').play();}else{$('winMsg').textContent=`✧ ${p1.nm.toUpperCase()} WINS! ✧`;$('win').classList.add('visible');launchConfetti();}}
+$('start').onclick=()=>{play(sfx.click);p1.nm=$('p1Name').value||'Player1';p2.nm=$('p2Name').value||'Player2';$('entry').classList.remove('visible');run=true;loop();};
+$('again').onclick=()=>{play(sfx.click);location.reload();};
+$('greet').onclick=()=>{$('greetVid').pause();$('greet').classList.remove('visible');};
+</script>
+</body>
+</html>
