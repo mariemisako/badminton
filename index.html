@@ -1,156 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xavier School Badminton Court – 80s Birthday Rally</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --court-top: #2ce66d;
-      --court-bottom: #138e46;
-      --line: #ffffff;
-      --p1: #ff5a38;
-      --p2: #36c5ff;
-      --accent: #ffeb3b;
-      --font: "Press Start 2P", monospace;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: var(--font);
-      background: #000;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
-      image-rendering: pixelated;
-    }
-
-    header {
-      width: 100%;
-      padding: 1rem 2rem;
-      text-align: center;
-      font-size: 1.1rem;
-      letter-spacing: 1.5px;
-      background: linear-gradient(90deg, var(--p1), var(--accent), var(--p2));
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: slide 6s linear infinite;
-      border-bottom: 4px solid var(--accent);
-    }
-
-    @keyframes slide {
-      0% { background-position: 0 0; }
-      100% { background-position: 300% 0; }
-    }
-
-    main {
-      flex: 1;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    canvas#court {
-      background: #000;
-      border: 4px solid var(--line);
-      box-shadow: 0 0 16px var(--accent);
-    }
-
-    /* Overlays */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.9);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      padding: 2rem;
-      font-family: var(--font);
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .overlay.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .overlay video {
-      width: 90%;
-      max-width: 600px;
-      border: 4px solid var(--accent);
-      box-shadow: 0 0 12px var(--accent);
-    }
-
-    .btn,
-    input {
-      border: 4px solid var(--accent);
-      font-family: var(--font);
-      font-size: 0.7rem;
-      padding: 0.7rem 1.4rem;
-    }
-
-    .btn {
-      background: #111;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.15s;
-      box-shadow: 0 0 8px var(--accent);
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-    }
-
-    input {
-      width: 220px;
-      background: #111;
-      color: #fff;
-      text-align: center;
-    }
-
-    .controls {
-      display: flex;
-      gap: 0.5rem;
-    }
+    :root { --court-top:#2ce66d; --court-bottom:#138e46; --line:#fff; --p1:#ff5a38; --p2:#36c5ff; --accent:#ffeb3b; --font:"Press Start 2P", monospace; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--font);background:#000;color:#fff;display:flex;flex-direction:column;min-height:100vh;align-items:center;overflow:hidden}
+    header{width:100%;padding:1rem 2rem;text-align:center;font-size:1.1rem;letter-spacing:1.5px;background:linear-gradient(90deg,var(--p1),var(--accent),var(--p2));background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:slide 6s linear infinite;border-bottom:4px solid var(--accent)}
+    @keyframes slide{0%{background-position:0}100%{background-position:300% 0}}
+    main{flex:1;width:100%;display:flex;justify-content:center;align-items:center}
+    canvas#court{background:#000;border:4px solid var(--line);box-shadow:0 0 16px var(--accent)}
+    .overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;background:rgba(0,0,0,.9);z-index:1000;opacity:0;pointer-events:none;transition:.4s}
+    .overlay.visible{opacity:1;pointer-events:auto}
+    .overlay video{width:90%;max-width:600px;border:4px solid var(--accent)}
+    .btn,input{border:4px solid var(--accent);font-family:var(--font);font-size:.7rem;padding:.6rem 1.2rem}
+    .btn{background:#111;color:#fff;cursor:pointer;transition:transform .15s}
+    .btn:hover{transform:scale(1.05)}
+    input{width:220px;background:#111;color:#fff;text-align:center}
+    .controls{display:flex;gap:.5rem}
   </style>
 </head>
 <body>
   <header>★ XAVIER SCHOOL BADMINTON COURT ★</header>
-  <main>
-    <canvas id="court" width="800" height="450"></canvas>
-  </main>
+  <main><canvas id="court" width="800" height="450"></canvas></main>
 
-  <!-- Entry -->
   <div id="entry" class="overlay visible">
-    <h2 style="font-size: 0.9rem">ENTER PLAYERS</h2>
-    <input id="p1Name" placeholder="Player 1" value="Player1" />
-    <input id="p2Name" placeholder="Player 2" value="Player2" />
-    <button id="start" class="btn">START MATCH</button>
+    <h2 style="font-size:.9rem">ENTER PLAYERS</h2>
+    <input id="p1Name" placeholder="Player 1" value="Player1">
+    <input id="p2Name" placeholder="Player 2" value="Player2">
+    <button id="startBtn" class="btn">START MATCH</button>
   </div>
 
-  <!-- Greeting -->
   <div id="greet" class="overlay">
-    <video id="greetVid" playsinline controls preload="auto">
-      <source src="greeting.mp4" type="video/mp4" />
-    </video>
+    <video id="greetVid" playsinline controls preload="auto"><source src="greeting.mp4" type="video/mp4"></video>
     <div class="controls">
       <button id="playBtn" class="btn">PLAY</button>
       <button id="pauseBtn" class="btn">PAUSE</button>
@@ -158,159 +43,42 @@
     </div>
   </div>
 
-  <!-- Win overlay -->
-  <div id="win" class="overlay">
-    <h2 id="winMsg" style="font-size: 0.9rem"></h2>
-    <button id="again" class="btn">PLAY AGAIN</button>
-  </div>
+  <div id="win" class="overlay"><h2 id="winMsg" style="font-size:.9rem"></h2><button id="againBtn" class="btn">PLAY AGAIN</button></div>
 
-  <!-- Confetti -->
   <canvas id="confetti" style="position:fixed;inset:0;pointer-events:none;z-index:1500;display:none"></canvas>
 
-  <!-- Audio -->
-  <audio id="hit" src="hit.wav"></audio>
-  <audio id="score" src="score.wav"></audio>
-  <audio id="victory" src="win.wav"></audio>
-  <audio id="clickSfx" src="click.wav"></audio>
+  <audio id="hit" src="hit.wav"></audio><audio id="score" src="score.wav"></audio><audio id="victory" src="win.wav"></audio><audio id="click" src="click.wav"></audio>
 
   <script>
-    // Utility helpers
-    const $ = (id) => document.getElementById(id);
-    const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-
-    // Canvas refs
-    const court = $("court");
-    const ctx = court.getContext("2d");
-    const confettiCanvas = $("confetti");
-    const cctx = confettiCanvas.getContext("2d");
-    confettiCanvas.width = innerWidth;
-    confettiCanvas.height = innerHeight;
-
-    // Audio
-    const sfx = {
-      hit: $("hit"),
-      score: $("score"),
-      victory: $("victory"),
-      click: $("clickSfx"),
-    };
-
-    const playSFX = (audio) => {
-      if (!audio) return;
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    };
-
-    // Game constants
-    const W = court.width,
-      H = court.height,
-      RW = 8,
-      RH = 85,
-      SPEED = 7,
-      MAX = 5;
-
-    const p1 = {
-      x: 36,
-      y: H / 2 - RH / 2,
-      dy: 0,
-      up: "w",
-      dn: "s",
-      sc: 0,
-      col: cssVar("--p1"),
-      nm: "Player1",
-    };
-    const p2 = {
-      x: W - 36 - RW,
-      y: H / 2 - RH / 2,
-      dy: 0,
-      up: "ArrowUp",
-      dn: "ArrowDown",
-      sc: 0,
-      col: cssVar("--p2"),
-      nm: "Player2",
-    };
-
-    const bird = { x: W / 2, y: H / 2, r: 7, dx: 5, dy: 4 };
-
-    let running = false;
-    let loopId;
-    const keys = {};
-    addEventListener("keydown", (e) => (keys[e.key] = true));
-    addEventListener("keyup", (e) => (keys[e.key] = false));
-
-    // Confetti
-    let confetti = [];
-    const launchConfetti = () => {
-      confettiCanvas.style.display = "block";
-      confetti = Array.from({ length: 150 }, () => ({
-        x: Math.random() * confettiCanvas.width,
-        y: Math.random() * -confettiCanvas.height,
-        size: Math.random() * 6 + 3,
-        vy: Math.random() * 3 + 2,
-        vx: (Math.random() - 0.5) * 2,
-        rot: Math.random() * 360,
-        color: `hsl(${Math.random() * 360},100%,60%)`,
-      }));
-      requestAnimationFrame(confLoop);
-      setTimeout(() => (confettiCanvas.style.display = "none"), 6000);
-    };
-
-    const confLoop = () => {
-      cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-      confetti.forEach((p) => {
-        p.y += p.vy;
-        p.x += p.vx;
-        p.rot += 3;
-        cctx.fillStyle = p.color;
-        cctx.save();
-        cctx.translate(p.x, p.y);
-        cctx.rotate((p.rot * Math.PI) / 180);
-        cctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        cctx.restore();
-      });
-      if (confetti.some((p) => p.y < confettiCanvas.height)) requestAnimationFrame(confLoop);
-    };
-
-    // Drawing helpers
-    const drawCourt = () => {
-      const g = ctx.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, cssVar("--court-top"));
-      g.addColorStop(1, cssVar("--court-bottom"));
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-      ctx.strokeStyle = cssVar("--line");
-      ctx.lineWidth = 4;
-      ctx.strokeRect(2, 2, W - 4, H - 4);
-      ctx.beginPath();
-      ctx.moveTo(W / 2, 2);
-      ctx.lineTo(W / 2, H - 2);
-      ctx.stroke();
-    };
-
-    const drawRacket = (p, left) => {
-      ctx.fillStyle = p.col;
-      ctx.fillRect(p.x, p.y + 20, RW, RH - 20);
-      ctx.strokeStyle = p.col;
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.ellipse(p.x + (left ? -14 : RW + 14), p.y + 20, 18, 24, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    };
-
-    const drawBird = () => {
-      ctx.fillStyle = cssVar("--line");
-      ctx.beginPath();
-      ctx.arc(bird.x, bird.y, bird.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(bird.x - 3, bird.y + bird.r);
-      ctx.lineTo(bird.x, bird.y + bird.r + 10);
-      ctx.lineTo(bird.x + 3, bird.y + bird.r);
-      ctx.fill();
-    };
-
-    const drawHUD = () => {
-      ctx.fillStyle = "#fff";
-      ctx.font = "14px " + cssVar("--font");
-      ctx.fillText(`${p1.nm}: ${p1.sc}`, 16, 28);
-      const rightText = `${p2.nm}: ${p2.sc}`;
-      ctx.fillText(right
+  const $=id=>document.getElementById(id),css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const c=$('court'),ctx=c.getContext('2d');const W=c.width,H=c.height;
+  const p1={x:36,y:H/2-42,dy:0,up:'w',dn:'s',sc:0,col:css('--p1'),nm:'P1'};
+  const p2={x:W-44,y:H/2-42,dy:0,up:'ArrowUp',dn:'ArrowDown',sc:0,col:css('--p2'),nm:'P2'};
+  const bird={x:W/2,y:H/2,r:7,dx:5,dy:4};
+  const KEY={};addEventListener('keydown',e=>KEY[e.key]=true);addEventListener('keyup',e=>KEY[e.key]=false);
+  const SFX={hit:$('hit'),score:$('score'),vic:$('victory'),click:$('click')};const play=a=>{if(a){a.currentTime=0;a.play().catch(()=>{});}}
+  // draw helpers
+  const courtGrad=ctx.createLinearGradient(0,0,0,H);courtGrad.addColorStop(0,css('--court-top'));courtGrad.addColorStop(1,css('--court-bottom'));
+  function drawCourt(){ctx.fillStyle=courtGrad;ctx.fillRect(0,0,W,H);ctx.lineWidth=4;ctx.strokeStyle=css('--line');ctx.strokeRect(2,2,W-4,H-4);ctx.beginPath();ctx.moveTo(W/2,2);ctx.lineTo(W/2,H-2);ctx.stroke();}
+  function rack(p,left){ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y+20,8,65);ctx.strokeStyle=p.col;ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(p.x+(left?-14:22),p.y+20,18,24,0,0,6.283);ctx.stroke();}
+  function birdDraw(){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(bird.x,bird.y,bird.r,0,6.283);ctx.fill();}
+  function hud(){ctx.fillStyle='#fff';ctx.font='14px '+css('--font');ctx.fillText(`${p1.nm}: ${p1.sc}`,16,28);const txt=`${p2.nm}: ${p2.sc}`;ctx.fillText(txt,W-16-ctx.measureText(txt).width,28);}
+  // game
+  let run=false,loopId;
+  function reset(dir){bird.x=W/2;bird.y=H/2;bird.dx=5*dir;bird.dy=(Math.random()>.5?4:-4);} 
+  function collide(p,left){return left?bird.x-bird.r<=p.x+8&&bird.y>=p.y&&bird.y<=p.y+85:bird.x+bird.r>=p.x&&bird.y>=p.y&&bird.y<=p.y+85;}
+  function update(){[p1,p2].forEach(p=>{p.dy=0;if(KEY[p.up])p.dy=-7;if(KEY[p.dn])p.dy=7;p.y=Math.max(0,Math.min(H-85,p.y+p.dy));});bird.x+=bird.dx;bird.y+=bird.dy;if(bird.y-bird.r<=2||bird.y+bird.r>=H-2){bird.dy*=-1;play(SFX.hit);}if(collide(p1,true)){bird.dx=Math.abs(bird.dx);play(SFX.hit);}if(collide(p2,false)){bird.dx=-Math.abs(bird.dx);play(SFX.hit);}if(bird.x<-30){p2.sc++;play(SFX.score);reset(1);}if(bird.x>W+30){p1.sc++;play(SFX.score);reset(-1);}if(p1.sc>=5||p2.sc>=5)finish();}
+  function draw(){drawCourt();rack(p1,true);rack(p2,false);birdDraw();hud();}
+  function loop(){if(!run)return;update();draw();loopId=requestAnimationFrame(loop);} 
+  // confetti simple
+  const conf=$('confetti'),cx=conf.getContext('2d');conf.width=innerWidth;conf.height=innerHeight;let confArr=[];
+  function confettiLaunch(){conf.style.display='block';confArr=Array.from({length:120},()=>({x:Math.random()*conf.width,y:Math.random()*-conf.height,s:Math.random()*6+3,vy:Math.random()*3+2,vx:(Math.random()-.5)*2,c:`hsl(${Math.random()*360},100%,60%)`}));requestAnimationFrame(confLoop);setTimeout(()=>conf.style.display='none',6e3);}function confLoop(){cx.clearRect(0,0,conf.width,conf.height);confArr.forEach(p=>{p.y+=p.vy;p.x+=p.vx;cx.fillStyle=p.c;cx.fillRect(p.x,p.y,p.s,p.s);});if(confArr.some(p=>p.y<conf.height))requestAnimationFrame(confLoop);} 
+  function finish(){run=false;cancelAnimationFrame(loopId);play(SFX.vic);if(p2.sc>=5){$('greet').classList.add('visible');$('greetVid').play().catch(()=>{});confettiLaunch();}else{$('winMsg').textContent=`✧ ${p1.nm.toUpperCase()} WINS! ✧`;$('win').classList.add('visible');confettiLaunch();}}
+  // buttons
+  $('startBtn').onclick=()=>{play(SFX.click);p1.nm=$('p1Name').value||'Player1';p2.nm=$('p2Name').value||'Player2';$('entry').classList.remove('visible');run=true;loop();};
+  $('againBtn').onclick=()=>{play(SFX.click);location.reload();};
+  $('greet').onclick=()=>{$('greetVid').pause();$('greet').classList.remove('visible');};
+  $('playBtn').onclick=()=>{$('greetVid').play();play(SFX.click);};$('pauseBtn').onclick=()=>{$('greetVid').pause();play(SFX.click);};$('restartBtn').onclick=()=>{$('greetVid').currentTime=0;$('greetVid').play();play(SFX.click);}  
+  </script>
+</body>
+</html>
